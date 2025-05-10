@@ -111,5 +111,5 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "include": ["src/**/*"],
-  "exclude": ["jest.config.ts", "**/*.spec.ts"]
+  "exclude": ["jest.config.ts", "**/test-data/**", "**/*.spec.ts"]
 }

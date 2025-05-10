@@ -1,3 +1,4 @@
+import { Lexeme } from "../scanner/Lexeme";
 import { Token } from "./Token";
 import { TokenType } from "./TokenType";
 
@@ -34,20 +35,20 @@ export class Tokenizer {
    * @param input input to tokenize
    * @returns generated tokens
    */
-  public tokenize(input: string): Token[] {
+  public tokenize(lexemes: Lexeme[]): Token[] {
     
     const tokens: Token[] = [];
     let line: number = 1;
     let column: number = 1;
 
-    input.split('').forEach((input: string) => {
+    lexemes.forEach((lexeme: string) => {
       
-      const tokenType: TokenType | undefined = Tokenizer.TOKEN_MAP.get(input);
+      const tokenType: TokenType | undefined = Tokenizer.TOKEN_MAP.get(lexeme);
 
       if (tokenType) {
         tokens.push(
           new Token(
-            input,
+            lexeme,
             tokenType,
             {
               line: line,
@@ -57,7 +58,7 @@ export class Tokenizer {
         );
       }
 
-      if (input === Tokenizer.NEW_LINE_SYMBOL) {
+      if (lexeme === Tokenizer.NEW_LINE_SYMBOL) {
         line++;
         column = 1;
       } else {
