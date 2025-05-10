@@ -1,0 +1,8 @@
+# directory where npm will put packages
+node_modules
+
+# directory that the build will create and store JS files in
+dist
+
+# directory that the test will create for tracking code coverage of tests
+coverage
