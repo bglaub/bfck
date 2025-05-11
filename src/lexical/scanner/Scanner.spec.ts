@@ -31,6 +31,20 @@ describe('Scanner', () => {
       );
     });
 
+    it('should scan given input of non-symbols into individual lexemes', () => {
+      expectLexemesToMatch(
+        scanner.scan(TEST_DATA.ALL_IGNORED_SYBOLS.STRING),
+        TEST_DATA.ALL_IGNORED_SYBOLS.LEXEMES
+      );
+    });
+
+    it('should scan given input of mixed-symbols into individual lexemes', () => {
+      expectLexemesToMatch(
+        scanner.scan(TEST_DATA.MIXED_SYMBOLS.STRING),
+        TEST_DATA.MIXED_SYMBOLS.LEXEMES
+      );
+    });
+
     it('should handle newline', () => {
       expectLexemesToMatch(
         scanner.scan(TEST_DATA.NEW_LINE.STRING),

@@ -17,6 +17,20 @@ describe('Analyzer', () => {
       );
     });
 
+    it('should return no tokens when input is all ignored symbols', () => {
+      expectTokensToMatch(
+        analyzer.analyze(TEST_DATA.ALL_IGNORED_SYBOLS.STRING),
+        TEST_DATA.ALL_IGNORED_SYBOLS.TOKENS
+      );
+    });
+
+    it('should return tokens when input is mixed symbols', () => {
+      expectTokensToMatch(
+        analyzer.analyze(TEST_DATA.MIXED_SYMBOLS.STRING),
+        TEST_DATA.MIXED_SYMBOLS.TOKENS
+      );
+    });
+
     it('should account for lines in input', () => {
       expectTokensToMatch(
         analyzer.analyze(TEST_DATA.NEW_LINE.STRING),

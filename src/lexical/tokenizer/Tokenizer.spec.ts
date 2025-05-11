@@ -40,72 +40,15 @@ describe('Tokenizer', () => {
 
     it('should ignore unknown lexemes', () => {
       expectTokensToMatch(
-        tokenizer.tokenize([
-          'a', 'b', 'c', 'd',
-          'e', 'f', 'g', 'h',
-          'i', 'j', 'k', 'l',
-          'm', 'n', 'o', 'p',
-          'q', 'r', 's', 't',
-          'u', 'v', 'w', 'x',
-          'y', 'z', 'A', 'B',
-          'C', 'D', 'E', 'F',
-          'G', 'H', 'I', 'J',
-          'K', 'L', 'M', 'N',
-          'O', 'P', 'Q', 'R',
-          'S', 'T', 'U', 'V',
-          'W', 'X', 'Y', 'Z',
-          '`', '1', '2', '3',
-          '4', '5', '6', '7',
-          '8', '9', '0', '=',
-          '~', '!', '@', '#',
-          '$', '%', '^', '&',
-          '*', '(', ')', '_',
-          '{', '}', '\\', '|',
-          '\'', '"', '/', '?',
-          ';', ':'
-        ]),
-        []
+        tokenizer.tokenize(TEST_DATA.ALL_IGNORED_SYBOLS.LEXEMES),
+        TEST_DATA.ALL_IGNORED_SYBOLS.TOKENS
       );
     });
 
     it('should return tokens for mixed lexemes', () => {
       expectTokensToMatch(
-        tokenizer.tokenize([
-          'a', 'b', 'c', 'd',
-          '-', 'e', 'f', 'g',
-          'h', 'i', 'j', 'k',
-          'l', 'm', 'n', 'o',
-          'p', 'q', 'r', 's',
-          't', 'u', 'v', 'w',
-          'x', 'y', 'z', 'A',
-          'B', '+', 'C', 'D',
-          'E', 'F', 'G', 'H',
-          'I', 'J', 'K', 'L',
-          'M', ']', '.', 'N',
-          'O', 'P', 'Q', 'R',
-          'S', 'T', 'U', 'V',
-          'W', 'X', 'Y', 'Z',
-          '`', '1', '2', '3',
-          '4', '5', '6', '7',
-          '8', ',', '9', '0',
-          '[', '=', '~', '!',
-          '@', '#', '$', '%',
-          '^', '&', '*', '(',
-          ')', '_', '<', '{',
-          '}', '\\', '|', '>',
-          '\'', '"', '/', '?',
-          ';', ':'
-        ]),
-        [
-          new Token('-', TokenType.DECREMENT_BYTE, {line: 1, column: 5}),
-          new Token('+', TokenType.INCREMENT_BYTE, {line: 1, column: 30}),
-          new Token(']', TokenType.MOVE_BACKWARD_INSTRUCTION_POINTER, {line: 1, column: 42}),
-          new Token('.', TokenType.OUTPUT_BYTE, {line: 1, column: 43}),
-          new Token(',', TokenType.INPUT_BYTE, {line: 1, column: 66}),
-          new Token('[', TokenType.MOVE_FORWARD_INSTRUCTION_POINTER, {line: 1, column: 69}),
-          new Token('<', TokenType.DECREMENT_DATA_POINTER, {line: 1, column: 83}),
-          new Token('>', TokenType.INCREMENT_DATA_POINTER, {line: 1, column: 88})
-        ]
+        tokenizer.tokenize(TEST_DATA.MIXED_SYMBOLS.LEXEMES),
+        TEST_DATA.MIXED_SYMBOLS.TOKENS
       );
     });
 
