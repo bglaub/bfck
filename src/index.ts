@@ -1,9 +1,6 @@
 import { FileReader } from "./input/FileReader";
 import { LexicalAnalyzer } from "./lexical/analyzer/LexicalAnalyzer";
-import { Lexeme } from "./lexical/scanner/Lexeme";
-import { Scanner } from "./lexical/scanner/Scanner";
 import { Token } from "./lexical/tokenizer/Token";
-import { Tokenizer } from "./lexical/tokenizer/Tokenizer";
 
 (() => {
   const fileReader: FileReader = new FileReader('.b');
