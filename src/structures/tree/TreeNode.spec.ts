@@ -7,10 +7,12 @@ describe('TreeNode', () => {
       expect(treeNode.data).toEqual('A');
       expect(treeNode.depth).toEqual(0);
       expect(treeNode.height).toEqual(0);
+      expect(treeNode.isRoot()).toEqual(true);
+      expect(treeNode.hasChildren()).toEqual(false);
     });
   });
 
-  describe('addChild()', () => {
+  describe('addChild', () => {
     it('should add child', () => {
       const aNode: TreeNode<string> = new TreeNode('A');
       const bNode: TreeNode<string> = new TreeNode('B');
@@ -19,8 +21,12 @@ describe('TreeNode', () => {
       
       expect(aNode.data).toEqual('A');
       expect(aNode.depth).toEqual(0);
+      expect(aNode.isRoot()).toEqual(true);
+      expect(aNode.hasChildren()).toEqual(true);
       expect(bNode.data).toEqual('B');
       expect(bNode.depth).toEqual(1);
+      expect(bNode.isRoot()).toEqual(false);
+      expect(bNode.hasChildren()).toEqual(false);
     });
 
     it('should calculate depth', () => {
@@ -152,6 +158,35 @@ describe('TreeNode', () => {
         cNode.addChild(bNode);
       }).toThrow('The node cannot be added because it was already added to a tree.');
     })
+  });
+
+  describe('detach', () => {
+    it('should detach child', () => {
+      const aNode: TreeNode<string> = new TreeNode('A');
+      const bNode: TreeNode<string> = new TreeNode('B');
+
+      aNode.addChild(bNode);
+      
+      expect(aNode.data).toEqual('A');
+      expect(aNode.depth).toEqual(0);
+      expect(aNode.isRoot()).toEqual(true);
+      expect(aNode.hasChildren()).toEqual(true);
+      expect(bNode.data).toEqual('B');
+      expect(bNode.depth).toEqual(1);
+      expect(bNode.isRoot()).toEqual(false);
+      expect(bNode.hasChildren()).toEqual(false);
+
+      bNode.detach();
+
+      expect(aNode.data).toEqual('A');
+      expect(aNode.depth).toEqual(0);
+      expect(aNode.isRoot()).toEqual(true);
+      expect(aNode.hasChildren()).toEqual(false);
+      expect(bNode.data).toEqual('B');
+      expect(bNode.depth).toEqual(0);
+      expect(bNode.isRoot()).toEqual(true);
+      expect(bNode.hasChildren()).toEqual(false);
+    });
   });
 
   describe('traverse', () => {

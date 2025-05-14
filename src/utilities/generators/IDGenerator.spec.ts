@@ -8,18 +8,12 @@ describe('IDGenerator', () => {
     });
 
     it('should generate unique IDs (100 IDs)', () => {
-      const ids: string[] = [];
+      const ids = new Set();
 
-      for(let i = 0; i < 100; i++) {
-        ids.push(IDGenerator.get());
-      }
-
-      for(let i = 0; i < ids.length; i++) {
-        for(let j = 0; j < ids.length; j++) {
-          if(i != j) {
-            expect(ids[i]).not.toEqual(ids[j]);
-          }
-        }
+      for(let i = 0; i < 10000; i++) {
+        const id: string = IDGenerator.get();
+        expect(ids.has(id)).toEqual(false);
+        ids.add(id);
       }
     });
   });
