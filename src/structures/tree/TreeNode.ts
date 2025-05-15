@@ -33,7 +33,7 @@ export class TreeNode<T> {
 
   public addChild(node: TreeNode<T>) {
     if(node.parent) {
-      throw new Error(`The node cannot be added because it was already added to a tree.`);
+      throw new Error('The node cannot be added because it was already added to a tree.');
     }
     node.parent = this;
     node._depth = this._depth + 1;
@@ -42,7 +42,7 @@ export class TreeNode<T> {
       sibling.rightSibling = node.id;
       node.leftSibling = sibling.id;
     }
-    this.reDepthChildren(Array.from(node.childrenMap.values()), node._depth);
+    this.reDepthChildren(node.childrenMap.values(), node._depth);
     this.reHeightParent(this, node.height);
     this.childrenMap.set(node.id, node);
   }
@@ -50,11 +50,11 @@ export class TreeNode<T> {
   public detach() {
     
     if(this.isRoot()) {
-      throw new Error('Unable to detach node because it is a root node');
+      throw new Error('Unable to detach node because it is a root node.');
     }
 
     if(!this.parent?.hasChildren()) {
-      throw new Error('Unable to find node to detach');
+      throw new Error('Unable to find node to detach.');
     }
     
     this.parent.childrenMap.delete(this.id);
@@ -71,11 +71,12 @@ export class TreeNode<T> {
     this.rightSibling = '';
     
     this._depth = 0;
-    this.reDepthChildren(Array.from(this.childrenMap.values()), this._depth);
+    this.reDepthChildren(this.childrenMap.values(), this._depth);
     
-    const node: TreeNode<T> = this.getTallestChild();
+    this.parent._height = 0
+    const node: TreeNode<T> | null = this.parent.getTallestChild();
     if(node) {
-      this.reHeightParent(this, node.height);
+      this.reHeightParent(this.parent, node.height);
     }
     
     this.parent = null;
@@ -91,11 +92,11 @@ export class TreeNode<T> {
     }
   }
 
-  private reDepthChildren(nodes: TreeNode<T>[], depth: number) {
-    nodes.forEach((node: TreeNode<T>) => {
+  private reDepthChildren(nodes: MapIterator<TreeNode<T>>, depth: number) {
+    for (const node of nodes) {
       node._depth = depth + 1;
-      this.reDepthChildren(Array.from(node.childrenMap.values()), node._depth);
-    });
+      this.reDepthChildren(node.childrenMap.values(), node._depth);
+    };
   }
 
   private reHeightParent(node: TreeNode<T> | null, height: number) {
@@ -109,13 +110,12 @@ export class TreeNode<T> {
     this.reHeightParent(node.parent, node._height);
   }
 
-  private getTallestChild(): TreeNode<T> {
-    const children: TreeNode<T>[] = Array.from(this.childrenMap.values());
-    let node: TreeNode<T> = children[0];
+  private getTallestChild(): TreeNode<T> | null {
+    let node: TreeNode<T> | null = null;
 
-    for(let i = 1; i < children.length; i++) {
-      if(node._height < children[i]._height) {
-        node = children[i];
+    for(const nextNode of this.childrenMap.values()) {
+      if(!node || node._height < nextNode._height) {
+        node = nextNode;
       }
     }
 

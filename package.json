@@ -4,7 +4,8 @@
   "private": "true",
   "scripts": {
     "build": "rm -rf dist && npx tsc",
-    "test": "npx jest"
+    "test": "npx jest",
+    "ops:build": "npm ci && npm run build && npm run test"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
