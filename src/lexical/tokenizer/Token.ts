@@ -3,7 +3,7 @@ import { TokenSymbol } from "./TokenSymbol";
 import { TokenType } from "./TokenType";
 
 /**
- * A token which represents a piece of input.
+ * A token represents a piece/part of input.
  */
 export class Token {
   /**

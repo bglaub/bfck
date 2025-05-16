@@ -3,7 +3,7 @@ import { Token } from "./Token";
 import { TokenType } from "./TokenType";
 
 /**
- * The tokenizer is meant for generating tokens from input.
+ * Tokenizer is responsible for taking the lexemes and generating tokens.
  */
 export class Tokenizer {
 

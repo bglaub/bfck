@@ -1,5 +1,5 @@
 /**
- * Position of a token.
+ * Position of a token in original source input.
  */
 export interface TokenPosition {
   /**

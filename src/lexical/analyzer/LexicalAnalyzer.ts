@@ -3,14 +3,15 @@ import { Token } from "../tokenizer/Token";
 import { Tokenizer } from "../tokenizer/Tokenizer";
 
 /**
- * Responsible for analyzing input into tokens
+ * Lexical analyzer is responsible for turning input into tokens and performing
+ * a lexical analysis in the process.
  */
 export class LexicalAnalyzer {
   /**
    * Analyzes input into tokens.
    * 
-   * @param input 
-   * @returns 
+   * @param input input to turn into tokens
+   * @returns tokens that represent the input
    */
   public analyze(input: string): Token[] {
       return (new Tokenizer()).tokenize(

@@ -30,7 +30,7 @@ export const TEST_DATA = {
       new Token(']', TokenType.MOVE_BACKWARD_INSTRUCTION_POINTER, {line: 1, column: 8})
     ]
   },
-  ALL_IGNORED_SYBOLS: {
+  ALL_IGNORED_SYMBOLS: {
     STRING: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`1234567890=~!@#$%^&*()_{}\\|\'"/?;:',
     LEXEMES: [
       'a', 'b', 'c', 'd',
