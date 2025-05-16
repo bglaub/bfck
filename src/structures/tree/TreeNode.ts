@@ -1,44 +1,114 @@
 import { IDGenerator } from "../../utilities/generators/IDGenerator";
 
+/**
+ * Tree node that holds data and able to build out a tree structure.
+ */
 export class TreeNode<T> {
   
+  /**
+   * The data that the tree node holds.
+   */
   public data: T;
+
+  /**
+   * Internal identifier that is used to find tree nodes amongst others in the
+   * structure.
+   */
   private readonly id: string = IDGenerator.get();
+  
+  /**
+   * The number of steps to get to the furthest tree node from this one.
+   */
   private height: number = 0;
+
+  /**
+   * The number of steps this tree node is from the root, unless it is a root.
+   */
   private depth: number = 0;
+
+  /**
+   * The parent of this node, unless it is a root.
+   */
   private parent: TreeNode<T> | null = null;
+
+  /**
+   * The identifier of the sibling to the right of this tree node, unless it is a root.
+   */
   private rightSiblingId: string = '';
+
+  /**
+   * The identifier of the sibling to the left of this tree node, unless it is a root.
+   */
   private leftSiblingId: string = '';
+
+  /**
+   * Map of children tree nodes belonging to this tree node.
+   */
   private childrenMap: Map<string, TreeNode<T>> = new Map();
 
   constructor(data: T) {
     this.data = data;
   }
 
+  /**
+   * Gets the depth.
+   * 
+   * @returns depth
+   */
   public getDepth(): number {
     return this.depth;
   }
 
+  /**
+   * Gets the height.
+   * 
+   * @returns height
+   */
   public getHeight(): number {
     return this.height;
   }
 
+  /**
+   * Determines if tree node is a root node.
+   * 
+   * @returns true if root node, false otherwise
+   */
   public isRoot(): boolean {
     return this.parent === null && this.depth === 0;
   }
 
+  /**
+   * Deterines if tree node has children.
+   * 
+   * @returns true if has children, false otherwise
+   */
   public hasChildren(): boolean {
     return !!this.childrenMap.size;
   }
 
+  /**
+   * Gets the left sibling tree node.
+   * 
+   * @returns left sibling, undefined otherwise
+   */
   public getLeftSibling(): TreeNode<T> | undefined {
     return this?.parent?.childrenMap.get(this.leftSiblingId);
   }
 
+  /**
+   * Gets the right sibling tree node.
+   * 
+   * @returns right sibling, undefined otherwise
+   */
   public getRightSibling(): TreeNode<T> | undefined {
     return this?.parent?.childrenMap.get(this.rightSiblingId);
   }
 
+  /**
+   * Adds tree node as child.
+   * 
+   * @param node tree node to add as child 
+   */
   public addChild(node: TreeNode<T>) {
     if(node.parent) {
       throw new Error('The node cannot be added because it was already added to a tree.');
@@ -50,11 +120,14 @@ export class TreeNode<T> {
       sibling.rightSiblingId = node.id;
       node.leftSiblingId = sibling.id;
     }
-    this.reDepthChildren(node.childrenMap.values(), node.depth);
-    this.reHeightParent(this, node.height);
+    this.recalculateDepth(node.childrenMap.values(), node.depth);
+    this.recalculateHeight(this, node.height);
     this.childrenMap.set(node.id, node);
   }
 
+  /**
+   * Detaches tree node from the overall structure.
+   */
   public detach() {
 
     if(this.isRoot()) {
@@ -79,17 +152,22 @@ export class TreeNode<T> {
     this.rightSiblingId = '';
     
     this.depth = 0;
-    this.reDepthChildren(this.childrenMap.values(), this.depth);
+    this.recalculateDepth(this.childrenMap.values(), this.depth);
     
     this.parent.height = 0
     const node: TreeNode<T> | null = this.parent.getTallestChild();
     if(node) {
-      this.reHeightParent(this.parent, node.height);
+      this.recalculateHeight(this.parent, node.height);
     }
     
     this.parent = null;
   }
 
+  /**
+   * Traverses each node by level.
+   * 
+   * @param fn callback function called as each node is visted.
+   */
   public traverse(fn: TreeTraversalCallback<T>): void {
     const queue: TreeNode<T>[] = [ this ];
     
@@ -100,14 +178,26 @@ export class TreeNode<T> {
     }
   }
 
-  private reDepthChildren(nodes: MapIterator<TreeNode<T>>, depth: number) {
+  /**
+   * Recalculates the depth of given nodes and their children.
+   * 
+   * @param nodes nodes to calculate depth on
+   * @param depth current depth
+   */
+  private recalculateDepth(nodes: MapIterator<TreeNode<T>>, depth: number): void {
     for (const node of nodes) {
       node.depth = depth + 1;
-      this.reDepthChildren(node.childrenMap.values(), node.depth);
+      this.recalculateDepth(node.childrenMap.values(), node.depth);
     };
   }
 
-  private reHeightParent(node: TreeNode<T> | null, height: number) {
+  /**
+   * Recalculates the height of the given node all the way up to the root.
+   * 
+   * @param node node to caluclate height on
+   * @param height current height
+   */
+  private recalculateHeight(node: TreeNode<T> | null, height: number): void {
     if (!node) {
       return;
     }
@@ -115,7 +205,7 @@ export class TreeNode<T> {
       return;
     }
     node.height = height + 1;
-    this.reHeightParent(node.parent, node.height);
+    this.recalculateHeight(node.parent, node.height);
   }
 
   private getTallestChild(): TreeNode<T> | null {
@@ -129,8 +219,9 @@ export class TreeNode<T> {
 
     return node;
   }
-
-  
 }
 
+/**
+ * Describes the callback for a traversal function.
+ */
 export type TreeTraversalCallback<T> = (node: TreeNode<T>) => void;
