@@ -11,8 +11,8 @@ describe('TreeNode', () => {
 
       // Test node "A"
       expect(aNode.data).toEqual('A');
-      expect(aNode.depth).toEqual(0);
-      expect(aNode.height).toEqual(0);
+      expect(aNode.getDepth()).toEqual(0);
+      expect(aNode.getHeight()).toEqual(0);
       expect(aNode.isRoot()).toEqual(true);
       expect(aNode.hasChildren()).toEqual(false);
     });
@@ -33,15 +33,15 @@ describe('TreeNode', () => {
       
       // Test node "A"
       expect(aNode.data).toEqual('A');
-      expect(aNode.depth).toEqual(0);
-      expect(aNode.height).toEqual(1);
+      expect(aNode.getDepth()).toEqual(0);
+      expect(aNode.getHeight()).toEqual(1);
       expect(aNode.isRoot()).toEqual(true);
       expect(aNode.hasChildren()).toEqual(true);
 
       // Test node "B"
       expect(bNode.data).toEqual('B');
-      expect(bNode.depth).toEqual(1);
-      expect(bNode.height).toEqual(0)
+      expect(bNode.getDepth()).toEqual(1);
+      expect(bNode.getHeight()).toEqual(0)
       expect(bNode.isRoot()).toEqual(false);
       expect(bNode.hasChildren()).toEqual(false);
     });
@@ -70,15 +70,15 @@ describe('TreeNode', () => {
       //   d    e    f         g
 
       // Test depth of nodes
-      expect(aNode.depth).toEqual(0);
-      expect(bNode.depth).toEqual(0);
-      expect(cNode.depth).toEqual(0);
-      expect(dNode.depth).toEqual(1);
-      expect(eNode.depth).toEqual(1);
-      expect(fNode.depth).toEqual(1);
-      expect(hNode.depth).toEqual(0);
-      expect(gNode.depth).toEqual(1);
-      expect(iNode.depth).toEqual(0);
+      expect(aNode.getDepth()).toEqual(0);
+      expect(bNode.getDepth()).toEqual(0);
+      expect(cNode.getDepth()).toEqual(0);
+      expect(dNode.getDepth()).toEqual(1);
+      expect(eNode.getDepth()).toEqual(1);
+      expect(fNode.getDepth()).toEqual(1);
+      expect(hNode.getDepth()).toEqual(0);
+      expect(gNode.getDepth()).toEqual(1);
+      expect(iNode.getDepth()).toEqual(0);
 
       eNode.addChild(hNode);
       gNode.addChild(iNode);
@@ -93,15 +93,15 @@ describe('TreeNode', () => {
       //        h              i
 
       // Test depth of each node
-      expect(aNode.depth).toEqual(0);
-      expect(bNode.depth).toEqual(0);
-      expect(cNode.depth).toEqual(0);
-      expect(dNode.depth).toEqual(1);
-      expect(eNode.depth).toEqual(1);
-      expect(fNode.depth).toEqual(1);
-      expect(hNode.depth).toEqual(2);
-      expect(gNode.depth).toEqual(1);
-      expect(iNode.depth).toEqual(2);
+      expect(aNode.getDepth()).toEqual(0);
+      expect(bNode.getDepth()).toEqual(0);
+      expect(cNode.getDepth()).toEqual(0);
+      expect(dNode.getDepth()).toEqual(1);
+      expect(eNode.getDepth()).toEqual(1);
+      expect(fNode.getDepth()).toEqual(1);
+      expect(hNode.getDepth()).toEqual(2);
+      expect(gNode.getDepth()).toEqual(1);
+      expect(iNode.getDepth()).toEqual(2);
 
       aNode.addChild(bNode);
       aNode.addChild(cNode);
@@ -120,15 +120,15 @@ describe('TreeNode', () => {
       //       h         i
 
       // Test depth of each node
-      expect(aNode.depth).toEqual(0);
-      expect(bNode.depth).toEqual(1);
-      expect(cNode.depth).toEqual(1);
-      expect(dNode.depth).toEqual(2);
-      expect(eNode.depth).toEqual(2);
-      expect(fNode.depth).toEqual(2);
-      expect(hNode.depth).toEqual(3);
-      expect(gNode.depth).toEqual(2);
-      expect(iNode.depth).toEqual(3);
+      expect(aNode.getDepth()).toEqual(0);
+      expect(bNode.getDepth()).toEqual(1);
+      expect(cNode.getDepth()).toEqual(1);
+      expect(dNode.getDepth()).toEqual(2);
+      expect(eNode.getDepth()).toEqual(2);
+      expect(fNode.getDepth()).toEqual(2);
+      expect(hNode.getDepth()).toEqual(3);
+      expect(gNode.getDepth()).toEqual(2);
+      expect(iNode.getDepth()).toEqual(3);
     });
     
     it('should calculate height', () => {
@@ -145,70 +145,70 @@ describe('TreeNode', () => {
       const jNode: TreeNode<string> = new TreeNode('J');
       const kNode: TreeNode<string> = new TreeNode('K');
 
-      expect(aNode.height).toEqual(0);
+      expect(aNode.getHeight()).toEqual(0);
 
       bNode.addChild(dNode);
 
-      expect(bNode.height).toEqual(1);
-      expect(dNode.height).toEqual(0);
+      expect(bNode.getHeight()).toEqual(1);
+      expect(dNode.getHeight()).toEqual(0);
 
       bNode.addChild(eNode);
       
-      expect(bNode.height).toEqual(1);
-      expect(eNode.height).toEqual(0);
+      expect(bNode.getHeight()).toEqual(1);
+      expect(eNode.getHeight()).toEqual(0);
 
       bNode.addChild(fNode);
       
-      expect(bNode.height).toEqual(1);
-      expect(fNode.height).toEqual(0);
+      expect(bNode.getHeight()).toEqual(1);
+      expect(fNode.getHeight()).toEqual(0);
 
       eNode.addChild(hNode);
 
-      expect(bNode.height).toEqual(2);
-      expect(eNode.height).toEqual(1);
-      expect(hNode.height).toEqual(0);
+      expect(bNode.getHeight()).toEqual(2);
+      expect(eNode.getHeight()).toEqual(1);
+      expect(hNode.getHeight()).toEqual(0);
 
       cNode.addChild(gNode);
 
-      expect(cNode.height).toEqual(1);
-      expect(gNode.height).toEqual(0);
+      expect(cNode.getHeight()).toEqual(1);
+      expect(gNode.getHeight()).toEqual(0);
 
       gNode.addChild(iNode);
       
-      expect(cNode.height).toEqual(2);
-      expect(gNode.height).toEqual(1);
-      expect(iNode.height).toEqual(0);
+      expect(cNode.getHeight()).toEqual(2);
+      expect(gNode.getHeight()).toEqual(1);
+      expect(iNode.getHeight()).toEqual(0);
 
       aNode.addChild(bNode);
       
-      expect(aNode.height).toEqual(3);
+      expect(aNode.getHeight()).toEqual(3);
 
       aNode.addChild(cNode);
 
-      expect(aNode.height).toEqual(3);
-      expect(bNode.height).toEqual(2);
-      expect(cNode.height).toEqual(2);
-      expect(dNode.height).toEqual(0);
-      expect(eNode.height).toEqual(1);
-      expect(fNode.height).toEqual(0);
-      expect(gNode.height).toEqual(1);
-      expect(hNode.height).toEqual(0);
-      expect(iNode.height).toEqual(0);
+      expect(aNode.getHeight()).toEqual(3);
+      expect(bNode.getHeight()).toEqual(2);
+      expect(cNode.getHeight()).toEqual(2);
+      expect(dNode.getHeight()).toEqual(0);
+      expect(eNode.getHeight()).toEqual(1);
+      expect(fNode.getHeight()).toEqual(0);
+      expect(gNode.getHeight()).toEqual(1);
+      expect(hNode.getHeight()).toEqual(0);
+      expect(iNode.getHeight()).toEqual(0);
 
       jNode.addChild(kNode);
       aNode.addChild(jNode);
 
-      expect(aNode.height).toEqual(3);
-      expect(bNode.height).toEqual(2);
-      expect(cNode.height).toEqual(2);
-      expect(dNode.height).toEqual(0);
-      expect(eNode.height).toEqual(1);
-      expect(fNode.height).toEqual(0);
-      expect(gNode.height).toEqual(1);
-      expect(hNode.height).toEqual(0);
-      expect(iNode.height).toEqual(0);
-      expect(jNode.height).toEqual(1);
-      expect(kNode.height).toEqual(0);
+      expect(aNode.getHeight()).toEqual(3);
+      expect(bNode.getHeight()).toEqual(2);
+      expect(cNode.getHeight()).toEqual(2);
+      expect(dNode.getHeight()).toEqual(0);
+      expect(eNode.getHeight()).toEqual(1);
+      expect(fNode.getHeight()).toEqual(0);
+      expect(gNode.getHeight()).toEqual(1);
+      expect(hNode.getHeight()).toEqual(0);
+      expect(iNode.getHeight()).toEqual(0);
+      expect(jNode.getHeight()).toEqual(1);
+      expect(kNode.getHeight()).toEqual(0);
     });
 
     it('should error if node added as child to two different nodes', () => {
@@ -238,13 +238,13 @@ describe('TreeNode', () => {
       
       // Test node "A"
       expect(aNode.data).toEqual('A');
-      expect(aNode.depth).toEqual(0);
+      expect(aNode.getDepth()).toEqual(0);
       expect(aNode.isRoot()).toEqual(true);
       expect(aNode.hasChildren()).toEqual(true);
 
       // Test node "B"
       expect(bNode.data).toEqual('B');
-      expect(bNode.depth).toEqual(1);
+      expect(bNode.getDepth()).toEqual(1);
       expect(bNode.isRoot()).toEqual(false);
       expect(bNode.hasChildren()).toEqual(false);
 
@@ -255,14 +255,14 @@ describe('TreeNode', () => {
 
       // Retest node "A"
       expect(aNode.data).toEqual('A');
-      expect(aNode.depth).toEqual(0);
-      expect(aNode.height).toEqual(0);
+      expect(aNode.getDepth()).toEqual(0);
+      expect(aNode.getHeight()).toEqual(0);
       expect(aNode.isRoot()).toEqual(true);
       expect(aNode.hasChildren()).toEqual(false);
 
       // Retest node "B"
       expect(bNode.data).toEqual('B');
-      expect(bNode.depth).toEqual(0);
+      expect(bNode.getDepth()).toEqual(0);
       expect(bNode.isRoot()).toEqual(true);
       expect(bNode.hasChildren()).toEqual(false);
     });
