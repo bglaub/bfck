@@ -92,7 +92,7 @@ export class TreeNode<T> {
    * @returns left sibling, undefined otherwise
    */
   public getLeftSibling(): TreeNode<T> | undefined {
-    return this?.parent?.childrenMap.get(this.leftSiblingId);
+    return this.parent?.childrenMap.get(this.leftSiblingId);
   }
 
   /**
@@ -101,7 +101,7 @@ export class TreeNode<T> {
    * @returns right sibling, undefined otherwise
    */
   public getRightSibling(): TreeNode<T> | undefined {
-    return this?.parent?.childrenMap.get(this.rightSiblingId);
+    return this.parent?.childrenMap.get(this.rightSiblingId);
   }
 
   /**
@@ -130,11 +130,11 @@ export class TreeNode<T> {
    */
   public detach() {
 
-    if(this.isRoot()) {
+    if(!this.parent) {
       throw new Error('Unable to detach node because it is a root node.');
     }
 
-    if(!this.parent?.hasChildren()) {
+    if(!this.parent.hasChildren()) {
       throw new Error('Unable to find node to detach.');
     }
     

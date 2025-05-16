@@ -267,7 +267,89 @@ describe('TreeNode', () => {
       expect(bNode.hasChildren()).toEqual(false);
     });
 
-    it('should recalculate heights, depths, and siblings', () => {
+    it('should recalculate heights, depths, and siblings on left node removal', () => {
+      const aNode: TreeNode<string> = new TreeNode('A');
+      const bNode: TreeNode<string> = new TreeNode('B');
+      const cNode: TreeNode<string> = new TreeNode('C');
+      const dNode: TreeNode<string> = new TreeNode('D');
+      const eNode: TreeNode<string> = new TreeNode('E');
+      const fNode: TreeNode<string> = new TreeNode('F');
+      const gNode: TreeNode<string> = new TreeNode('G');
+      const iNode: TreeNode<string> = new TreeNode('I');
+      const jNode: TreeNode<string> = new TreeNode('J');
+      const kNode: TreeNode<string> = new TreeNode('K');
+
+      aNode.addChild(bNode);
+      aNode.addChild(cNode);
+      aNode.addChild(jNode);
+      bNode.addChild(dNode);
+      bNode.addChild(eNode);
+      bNode.addChild(fNode);
+      cNode.addChild(gNode);
+      gNode.addChild(iNode);
+      jNode.addChild(kNode);
+
+      // Tree should look like this:
+      //                 a
+      //            /    |    \
+      //           /     |     \
+      //          /      |      \
+      //         /       |       \
+      //        /        |        \
+      //       b         c         j
+      //    /  |  \      |         |
+      //   /   |   \     |         |
+      //  d    e    f    g         k
+      //                 |
+      //                 |
+      //                 i
+
+      bNode.detach();
+
+      // Test height of "A" node tree
+      expect(aNode.getHeight()).toEqual(3);
+      expect(cNode.getHeight()).toEqual(2);
+      expect(gNode.getHeight()).toEqual(1);
+      expect(iNode.getHeight()).toEqual(0);
+      expect(jNode.getHeight()).toEqual(1);
+      expect(kNode.getHeight()).toEqual(0);
+
+      // Test height of "B" node tree
+      expect(bNode.getHeight()).toEqual(1);
+      expect(dNode.getHeight()).toEqual(0);
+      expect(eNode.getHeight()).toEqual(0);
+      expect(fNode.getHeight()).toEqual(0);
+
+      // Test depth of "A" node tree
+      expect(aNode.getDepth()).toEqual(0);
+      expect(cNode.getDepth()).toEqual(1);
+      expect(gNode.getDepth()).toEqual(2);
+      expect(iNode.getDepth()).toEqual(3);
+      expect(jNode.getDepth()).toEqual(1);
+      expect(kNode.getDepth()).toEqual(2);
+
+      // Test depth of "B" node tree
+      expect(bNode.getDepth()).toEqual(0);
+      expect(dNode.getDepth()).toEqual(1);
+      expect(eNode.getDepth()).toEqual(1);
+      expect(fNode.getDepth()).toEqual(1);
+
+      // Test "B" node siblings
+      expect(bNode.getLeftSibling()).toBeUndefined();
+      expect(bNode.getRightSibling()).toBeUndefined();
+
+      // Test "C" node siblings
+      expect(cNode.getLeftSibling()).toBeUndefined();
+      expect(cNode.getRightSibling()).toBeDefined();
+      expect(cNode.getRightSibling()?.data).toEqual(jNode.data);
+
+      // Test "J" node siblings
+      expect(jNode.getLeftSibling()).toBeDefined();
+      expect(jNode.getRightSibling()).toBeUndefined();
+      expect(jNode.getLeftSibling()?.data).toEqual(cNode.data);
+    });
+
+    it('should recalculate heights, depths, and siblings on middle node removal', () => {
       const aNode: TreeNode<string> = new TreeNode('A');
       const bNode: TreeNode<string> = new TreeNode('B');
       const cNode: TreeNode<string> = new TreeNode('C');
@@ -309,6 +391,7 @@ describe('TreeNode', () => {
       // Test height of "A" node tree
       expect(aNode.getHeight()).toEqual(2);
       expect(bNode.getHeight()).toEqual(1);
+      expect(jNode.getHeight()).toEqual(1);
       expect(dNode.getHeight()).toEqual(0);
       expect(eNode.getHeight()).toEqual(0);
       expect(fNode.getHeight()).toEqual(0);
@@ -346,6 +429,88 @@ describe('TreeNode', () => {
       expect(jNode.getLeftSibling()).toBeDefined();
       expect(jNode.getRightSibling()).toBeUndefined();
       expect(jNode.getLeftSibling()?.data).toEqual(bNode.data);
+    });
+
+    it('should recalculate heights, depths, and siblings on right node removal', () => {
+      const aNode: TreeNode<string> = new TreeNode('A');
+      const bNode: TreeNode<string> = new TreeNode('B');
+      const cNode: TreeNode<string> = new TreeNode('C');
+      const dNode: TreeNode<string> = new TreeNode('D');
+      const eNode: TreeNode<string> = new TreeNode('E');
+      const fNode: TreeNode<string> = new TreeNode('F');
+      const gNode: TreeNode<string> = new TreeNode('G');
+      const iNode: TreeNode<string> = new TreeNode('I');
+      const jNode: TreeNode<string> = new TreeNode('J');
+      const kNode: TreeNode<string> = new TreeNode('K');
+
+      aNode.addChild(bNode);
+      aNode.addChild(cNode);
+      aNode.addChild(jNode);
+      bNode.addChild(dNode);
+      bNode.addChild(eNode);
+      bNode.addChild(fNode);
+      cNode.addChild(gNode);
+      gNode.addChild(iNode);
+      jNode.addChild(kNode);
+
+      // Tree should look like this:
+      //                 a
+      //            /    |    \
+      //           /     |     \
+      //          /      |      \
+      //         /       |       \
+      //        /        |        \
+      //       b         c         j
+      //    /  |  \      |         |
+      //   /   |   \     |         |
+      //  d    e    f    g         k
+      //                 |
+      //                 |
+      //                 i
+
+      jNode.detach();
+
+      // Test height of "A" node tree
+      expect(aNode.getHeight()).toEqual(3);
+      expect(bNode.getHeight()).toEqual(1);
+      expect(dNode.getHeight()).toEqual(0);
+      expect(eNode.getHeight()).toEqual(0);
+      expect(fNode.getHeight()).toEqual(0);
+      expect(cNode.getHeight()).toEqual(2);
+      expect(gNode.getHeight()).toEqual(1);
+      expect(iNode.getHeight()).toEqual(0);
+
+      // Test height of "J" node tree
+      expect(jNode.getHeight()).toEqual(1);
+      expect(kNode.getHeight()).toEqual(0);
+
+      // Test depth of "A" node tree
+      expect(aNode.getDepth()).toEqual(0);
+      expect(bNode.getDepth()).toEqual(1);
+      expect(dNode.getDepth()).toEqual(2);
+      expect(eNode.getDepth()).toEqual(2);
+      expect(fNode.getDepth()).toEqual(2);
+      expect(cNode.getDepth()).toEqual(1);
+      expect(gNode.getDepth()).toEqual(2);
+      expect(iNode.getDepth()).toEqual(3);
+
+      // Test depth of "J" node tree
+      expect(jNode.getDepth()).toEqual(0);
+      expect(kNode.getDepth()).toEqual(1);
+
+      // Test "J" node siblings
+      expect(jNode.getLeftSibling()).toBeUndefined();
+      expect(jNode.getRightSibling()).toBeUndefined();
+
+      // Test "C" node siblings
+      expect(cNode.getLeftSibling()).toBeDefined();
+      expect(cNode.getRightSibling()).toBeUndefined();
+      expect(cNode.getLeftSibling()?.data).toEqual(bNode.data);
+
+      // Test "B" node siblings
+      expect(bNode.getLeftSibling()).toBeUndefined();
+      expect(bNode.getRightSibling()).toBeDefined();
+      expect(bNode.getRightSibling()?.data).toEqual(cNode.data);
     });
 
     it('should error if detaching a root node', () => {
