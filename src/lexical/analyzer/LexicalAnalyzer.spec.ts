@@ -9,7 +9,7 @@ describe('Analyzer', () => {
    */
   const analyzer: LexicalAnalyzer = new LexicalAnalyzer();
 
-  describe('analyze()', () => {
+  describe('analyze', () => {
     it('should return token for each input', () => {
       expectTokensToMatch(
         analyzer.analyze(TEST_DATA.ALL_ALLOWED_SYMBOLS.STRING),
@@ -19,8 +19,8 @@ describe('Analyzer', () => {
 
     it('should return no tokens when input is all ignored symbols', () => {
       expectTokensToMatch(
-        analyzer.analyze(TEST_DATA.ALL_IGNORED_SYBOLS.STRING),
-        TEST_DATA.ALL_IGNORED_SYBOLS.TOKENS
+        analyzer.analyze(TEST_DATA.ALL_IGNORED_SYMBOLS.STRING),
+        TEST_DATA.ALL_IGNORED_SYMBOLS.TOKENS
       );
     });
 

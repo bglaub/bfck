@@ -1,5 +1,5 @@
 {
-    "image": "mcr.microsoft.com/devcontainers/typescript-node:1-18",
+    "image": "mcr.microsoft.com/devcontainers/typescript-node:22-bookworm",
     "customizations": {
         "vscode": {
           "extensions": ["streetsidesoftware.code-spell-checker"]

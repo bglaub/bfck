@@ -1,9 +1,9 @@
 import { Lexeme } from "../scanner/Lexeme";
-import { Token } from "./Token";
-import { TokenType } from "./TokenType";
+import { Token } from "./token/Token";
+import { TokenType } from "./token/TokenType";
 
 /**
- * The tokenizer is meant for generating tokens from input.
+ * Tokenizer is responsible for taking the lexemes and generating tokens.
  */
 export class Tokenizer {
 

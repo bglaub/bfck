@@ -1,6 +1,8 @@
 import { FileReader } from "./input/FileReader";
 import { LexicalAnalyzer } from "./lexical/analyzer/LexicalAnalyzer";
-import { Token } from "./lexical/tokenizer/Token";
+import { Token } from "./lexical/tokenizer/token/Token";
+import { InstructionTreeNode } from "./syntax/parser/Instruction/InstructionTreeNode";
+import { Parser } from "./syntax/parser/Parser";
 
 (() => {
   const fileReader: FileReader = new FileReader('.b');
@@ -11,10 +13,13 @@ import { Token } from "./lexical/tokenizer/Token";
 
   const tokens: Token[] = analyzer.analyze(input);
 
-  tokens.forEach((token: Token) => {
+  const ast: InstructionTreeNode = (new Parser()).parse(tokens);
+
+  ast.traverse((node: InstructionTreeNode) => {
     console.log('---------------------------------------------');
-    console.log(token.toString());
+    console.log(`DEPTH: ${node.getDepth()}`);
+    console.log(`OPERATION: ${node.data.operation}`);
+    console.log(`METADATA: ${JSON.stringify(node.data.metadata, null, 2)}`);
     console.log('---------------------------------------------');
-    console.log('');
   });
 })();

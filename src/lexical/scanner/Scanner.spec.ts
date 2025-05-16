@@ -23,7 +23,7 @@ describe('Scanner', () => {
    */
   const scanner = new Scanner();
 
-  describe('scan()', () => {
+  describe('scan', () => {
     it('should scan given input into individual lexemes', () => {
       expectLexemesToMatch(
         scanner.scan(TEST_DATA.ALL_ALLOWED_SYMBOLS.STRING),
@@ -33,8 +33,8 @@ describe('Scanner', () => {
 
     it('should scan given input of non-symbols into individual lexemes', () => {
       expectLexemesToMatch(
-        scanner.scan(TEST_DATA.ALL_IGNORED_SYBOLS.STRING),
-        TEST_DATA.ALL_IGNORED_SYBOLS.LEXEMES
+        scanner.scan(TEST_DATA.ALL_IGNORED_SYMBOLS.STRING),
+        TEST_DATA.ALL_IGNORED_SYMBOLS.LEXEMES
       );
     });
 

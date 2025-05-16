@@ -78,12 +78,21 @@ export class TreeNode<T> {
   }
 
   /**
-   * Deterines if tree node has children.
+   * Determines if tree node has children.
    * 
    * @returns true if has children, false otherwise
    */
   public hasChildren(): boolean {
     return !!this.childrenMap.size;
+  }
+
+  /**
+   * Gets the parent tree node.
+   * 
+   * @returns parent, null otherwise
+   */
+  public getParent(): TreeNode<T> | null {
+    return this.parent;
   }
 
   /**
@@ -102,6 +111,24 @@ export class TreeNode<T> {
    */
   public getRightSibling(): TreeNode<T> | undefined {
     return this.parent?.childrenMap.get(this.rightSiblingId);
+  }
+
+  /**
+   * Gets the first child of the tree node.
+   * 
+   * @returns first child, undefined otherwise
+   */
+  public getFirstChild(): TreeNode<T> | undefined {
+    return Array.from(this.childrenMap.values()).reverse().pop();
+  }
+
+  /**
+   * Gets the lst child of the tree node.
+   * 
+   * @returns last child, undefined otherwise
+   */
+  public getLastChild(): TreeNode<T> | undefined {
+    return Array.from(this.childrenMap.values()).pop();
   }
 
   /**
@@ -154,7 +181,7 @@ export class TreeNode<T> {
     this.depth = 0;
     this.recalculateDepth(this.childrenMap.values(), this.depth);
     
-    this.parent.height = 0
+    this.parent.height = 0;
     const node: TreeNode<T> | null = this.parent.getTallestChild();
     if(node) {
       this.recalculateHeight(this.parent, node.height);
@@ -166,11 +193,11 @@ export class TreeNode<T> {
   /**
    * Traverses each node by level.
    * 
-   * @param fn callback function called as each node is visted.
+   * @param fn callback function called as each node is visited.
    */
   public traverse(fn: TreeTraversalCallback<T>): void {
     const queue: TreeNode<T>[] = [ this ];
-    
+
     while(queue.length) {
       const currentNode: TreeNode<T> = queue.shift() as TreeNode<T>
       fn(currentNode);
@@ -184,7 +211,7 @@ export class TreeNode<T> {
    * @param nodes nodes to calculate depth on
    * @param depth current depth
    */
-  private recalculateDepth(nodes: MapIterator<TreeNode<T>>, depth: number): void {
+  private recalculateDepth(nodes: IterableIterator<TreeNode<T>>, depth: number): void {
     for (const node of nodes) {
       node.depth = depth + 1;
       this.recalculateDepth(node.childrenMap.values(), node.depth);

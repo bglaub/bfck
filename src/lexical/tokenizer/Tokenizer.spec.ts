@@ -1,6 +1,5 @@
 import { Tokenizer } from "./Tokenizer";
-import { Token } from "./Token";
-import { TokenType } from "./TokenType";
+import { Token } from "./token/Token";
 import { TEST_DATA } from "../test-data/TestData";
 
 /**
@@ -30,7 +29,7 @@ describe('Tokenizer', () => {
     tokenizer = new Tokenizer();
   });
 
-  describe('tokenize()', () => {
+  describe('tokenize', () => {
     it('should return token for each lexeme', () => {
       expectTokensToMatch(
         tokenizer.tokenize(TEST_DATA.ALL_ALLOWED_SYMBOLS.LEXEMES),
@@ -40,8 +39,8 @@ describe('Tokenizer', () => {
 
     it('should ignore unknown lexemes', () => {
       expectTokensToMatch(
-        tokenizer.tokenize(TEST_DATA.ALL_IGNORED_SYBOLS.LEXEMES),
-        TEST_DATA.ALL_IGNORED_SYBOLS.TOKENS
+        tokenizer.tokenize(TEST_DATA.ALL_IGNORED_SYMBOLS.LEXEMES),
+        TEST_DATA.ALL_IGNORED_SYMBOLS.TOKENS
       );
     });
 
