@@ -305,6 +305,18 @@ describe('TreeNode', () => {
       //                 i
 
       bNode.detach();
+      
+      // Trees should look like this:
+      //      b          a
+      //   /  |  \       | \
+      //  /   |   \      |  \
+      // d    e    f     c    j
+      //                 |    |
+      //                 |    |
+      //                 g    k
+      //                 |
+      //                 |
+      //                 i
 
       // Test height of "A" node tree
       expect(aNode.getHeight()).toEqual(3);
@@ -388,6 +400,15 @@ describe('TreeNode', () => {
 
       cNode.detach();
 
+      // Trees should look like this:
+      //            a          c
+      //         /     \       |
+      //        /       \      |
+      //       b         j     g
+      //    /  |  \      |     |
+      //   /   |   \     |     |
+      //  d    e    f    k     i
+
       // Test height of "A" node tree
       expect(aNode.getHeight()).toEqual(2);
       expect(bNode.getHeight()).toEqual(1);
@@ -469,6 +490,18 @@ describe('TreeNode', () => {
       //                 i
 
       jNode.detach();
+
+      // Trees should look like this:
+      //            a          j
+      //         /     \       |
+      //        /       \      |
+      //       b         c     k
+      //    /  |  \      |
+      //   /   |   \     |
+      //  d    e    f    g
+      //                 |
+      //                 |
+      //                 i
 
       // Test height of "A" node tree
       expect(aNode.getHeight()).toEqual(3);
@@ -581,6 +614,18 @@ describe('TreeNode', () => {
       eNode.addChild(hNode);
       cNode.addChild(gNode);
       gNode.addChild(iNode);
+
+      // Tree should look like this:
+      //           a
+      //        /     \
+      //       /       \
+      //      b         c
+      //   /  |  \      |
+      //  /   |   \     |
+      // d    e    f    g
+      //      |         |
+      //      |         |
+      //      h         i
 
       const expected: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
 
