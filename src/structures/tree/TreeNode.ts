@@ -87,6 +87,15 @@ export class TreeNode<T> {
   }
 
   /**
+   * Gets the parent tree node.
+   * 
+   * @returns parent, null otherwise
+   */
+  public getParent(): TreeNode<T> | null {
+    return this.parent;
+  }
+
+  /**
    * Gets the left sibling tree node.
    * 
    * @returns left sibling, undefined otherwise
@@ -184,7 +193,7 @@ export class TreeNode<T> {
    * @param nodes nodes to calculate depth on
    * @param depth current depth
    */
-  private recalculateDepth(nodes: MapIterator<TreeNode<T>>, depth: number): void {
+  private recalculateDepth(nodes: IterableIterator<TreeNode<T>>, depth: number): void {
     for (const node of nodes) {
       node.depth = depth + 1;
       this.recalculateDepth(node.childrenMap.values(), node.depth);

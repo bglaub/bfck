@@ -1,6 +1,8 @@
 import { FileReader } from "./input/FileReader";
 import { LexicalAnalyzer } from "./lexical/analyzer/LexicalAnalyzer";
 import { Token } from "./lexical/tokenizer/Token";
+import { ParseTreeNode } from "./syntax/parser/ParseTreeNode";
+import { Parser } from "./syntax/parser/Parser";
 
 (() => {
   const fileReader: FileReader = new FileReader('.b');
@@ -11,10 +13,16 @@ import { Token } from "./lexical/tokenizer/Token";
 
   const tokens: Token[] = analyzer.analyze(input);
 
-  tokens.forEach((token: Token) => {
+  const cst: ParseTreeNode = (new Parser()).parse(tokens);
+
+  cst.traverse((node: ParseTreeNode) => {
     console.log('---------------------------------------------');
-    console.log(token.toString());
+    if(node.data.token) {
+      console.log(`${node.data.token?.toString()}`);
+    }
+    console.log(`DEPTH: ${node.getDepth()}`);
+    console.log(`LEFT SIBLING: ${node.getLeftSibling()?.data?.token?.symbol}`);
+    console.log(`RIGHT SIBLING: ${node.getRightSibling()?.data?.token?.symbol}`);
     console.log('---------------------------------------------');
-    console.log('');
   });
 })();

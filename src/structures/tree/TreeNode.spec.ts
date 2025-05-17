@@ -13,6 +13,7 @@ describe('TreeNode', () => {
       expect(aNode.data).toEqual('A');
       expect(aNode.getDepth()).toEqual(0);
       expect(aNode.getHeight()).toEqual(0);
+      expect(aNode.getParent()).toBeNull();
       expect(aNode.isRoot()).toEqual(true);
       expect(aNode.hasChildren()).toEqual(false);
     });
@@ -35,6 +36,7 @@ describe('TreeNode', () => {
       expect(aNode.data).toEqual('A');
       expect(aNode.getDepth()).toEqual(0);
       expect(aNode.getHeight()).toEqual(1);
+      expect(aNode.getParent()).toBeNull();
       expect(aNode.isRoot()).toEqual(true);
       expect(aNode.hasChildren()).toEqual(true);
 
@@ -42,6 +44,7 @@ describe('TreeNode', () => {
       expect(bNode.data).toEqual('B');
       expect(bNode.getDepth()).toEqual(1);
       expect(bNode.getHeight()).toEqual(0)
+      expect(bNode.getParent()).toEqual(aNode.data);
       expect(bNode.isRoot()).toEqual(false);
       expect(bNode.hasChildren()).toEqual(false);
     });
