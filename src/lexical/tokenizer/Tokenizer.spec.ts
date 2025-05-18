@@ -1,6 +1,5 @@
 import { Tokenizer } from "./Tokenizer";
-import { Token } from "./Token";
-import { TokenType } from "./TokenType";
+import { Token } from "./token/Token";
 import { TEST_DATA } from "../test-data/TestData";
 
 /**

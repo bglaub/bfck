@@ -7,7 +7,7 @@ describe('IDGenerator', () => {
       expect(id).toBeDefined();
     });
 
-    it('should generate unique IDs (100 IDs)', () => {
+    it('should generate unique IDs (10000 IDs)', () => {
       const ids = new Set();
 
       for(let i = 0; i < 10000; i++) {

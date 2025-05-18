@@ -78,7 +78,7 @@ export class TreeNode<T> {
   }
 
   /**
-   * Deterines if tree node has children.
+   * Determines if tree node has children.
    * 
    * @returns true if has children, false otherwise
    */
@@ -111,6 +111,24 @@ export class TreeNode<T> {
    */
   public getRightSibling(): TreeNode<T> | undefined {
     return this.parent?.childrenMap.get(this.rightSiblingId);
+  }
+
+  /**
+   * Gets the first child of the tree node.
+   * 
+   * @returns first child, undefined otherwise
+   */
+  public getFirstChild(): TreeNode<T> | undefined {
+    return Array.from(this.childrenMap.values()).pop();
+  }
+
+  /**
+   * Gets the lst child of the tree node.
+   * 
+   * @returns last child, undefined otherwise
+   */
+  public getLastChild(): TreeNode<T> | undefined {
+    return Array.from(this.childrenMap.values()).reverse().pop();
   }
 
   /**
@@ -175,7 +193,7 @@ export class TreeNode<T> {
   /**
    * Traverses each node by level.
    * 
-   * @param fn callback function called as each node is visted.
+   * @param fn callback function called as each node is visited.
    */
   public traverse(fn: TreeTraversalCallback<T>): void {
     const queue: TreeNode<T>[] = [ this ];

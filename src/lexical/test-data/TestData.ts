@@ -1,5 +1,5 @@
-import { Token } from "../tokenizer/Token";
-import { TokenType } from "../tokenizer/TokenType";
+import { Token } from "../tokenizer/token/Token";
+import { TokenType } from "../tokenizer/token/TokenType";
 
 /**
  * Data that holds all the lexical representations:

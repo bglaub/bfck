@@ -1,7 +1,7 @@
 import { FileReader } from "./input/FileReader";
 import { LexicalAnalyzer } from "./lexical/analyzer/LexicalAnalyzer";
-import { Token } from "./lexical/tokenizer/Token";
-import { ParseTreeNode } from "./syntax/parser/ParseTreeNode";
+import { Token } from "./lexical/tokenizer/token/Token";
+import { ParseTreeNode } from "./syntax/parser/ParsedInstruction/ParseTreeNode";
 import { Parser } from "./syntax/parser/Parser";
 
 (() => {

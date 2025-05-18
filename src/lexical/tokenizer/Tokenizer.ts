@@ -1,6 +1,6 @@
 import { Lexeme } from "../scanner/Lexeme";
-import { Token } from "./Token";
-import { TokenType } from "./TokenType";
+import { Token } from "./token/Token";
+import { TokenType } from "./token/TokenType";
 
 /**
  * Tokenizer is responsible for taking the lexemes and generating tokens.

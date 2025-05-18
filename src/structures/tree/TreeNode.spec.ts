@@ -16,6 +16,8 @@ describe('TreeNode', () => {
       expect(aNode.getParent()).toBeNull();
       expect(aNode.isRoot()).toEqual(true);
       expect(aNode.hasChildren()).toEqual(false);
+      expect(aNode.getFirstChild()).toBeUndefined();
+      expect(aNode.getLastChild()).toBeUndefined();
     });
   });
 
@@ -39,14 +41,18 @@ describe('TreeNode', () => {
       expect(aNode.getParent()).toBeNull();
       expect(aNode.isRoot()).toEqual(true);
       expect(aNode.hasChildren()).toEqual(true);
+      expect(aNode.getFirstChild()?.data).toEqual('B');
+      expect(aNode.getLastChild()?.data).toEqual('B');
 
       // Test node "B"
       expect(bNode.data).toEqual('B');
       expect(bNode.getDepth()).toEqual(1);
       expect(bNode.getHeight()).toEqual(0)
-      expect(bNode.getParent()).toEqual(aNode.data);
+      expect(bNode.getParent()?.data).toEqual(aNode.data);
       expect(bNode.isRoot()).toEqual(false);
       expect(bNode.hasChildren()).toEqual(false);
+      expect(bNode.getFirstChild()).toBeUndefined();
+      expect(bNode.getLastChild()).toBeUndefined();
     });
 
     it('should calculate depth', () => {
@@ -148,24 +154,54 @@ describe('TreeNode', () => {
       const jNode: TreeNode<string> = new TreeNode('J');
       const kNode: TreeNode<string> = new TreeNode('K');
 
+      // Tree should look like this:
+      //     A
+     
       expect(aNode.getHeight()).toEqual(0);
 
       bNode.addChild(dNode);
+
+      // Trees should look like this:
+      //      B         A
+      //     /
+      //    / 
+      //   D
 
       expect(bNode.getHeight()).toEqual(1);
       expect(dNode.getHeight()).toEqual(0);
 
       bNode.addChild(eNode);
-      
+
+      // Trees should look like this:
+      //        B         A
+      //     /  |
+      //    /   |
+      //   D    E
+
       expect(bNode.getHeight()).toEqual(1);
       expect(eNode.getHeight()).toEqual(0);
 
       bNode.addChild(fNode);
       
+      // Trees should look like this:
+      //        B         A
+      //     /  |  \
+      //    /   |   \
+      //   D    E    F
+
       expect(bNode.getHeight()).toEqual(1);
       expect(fNode.getHeight()).toEqual(0);
 
       eNode.addChild(hNode);
+
+      // Trees should look like this:
+      //        B         A
+      //     /  |  \
+      //    /   |   \
+      //   D    E    F
+      //        |
+      //        |
+      //        H
 
       expect(bNode.getHeight()).toEqual(2);
       expect(eNode.getHeight()).toEqual(1);
@@ -173,20 +209,64 @@ describe('TreeNode', () => {
 
       cNode.addChild(gNode);
 
+      // Trees should look like this:
+      //        B         A         C
+      //     /  |  \                |
+      //    /   |   \               |
+      //   D    E    F              G
+      //        |
+      //        |
+      //        H
+
       expect(cNode.getHeight()).toEqual(1);
       expect(gNode.getHeight()).toEqual(0);
 
       gNode.addChild(iNode);
       
+      // Trees should look like this:
+      //        B         A         C
+      //     /  |  \                |
+      //    /   |   \               |
+      //   D    E    F              G
+      //        |                   |
+      //        |                   |
+      //        H                   I
+
       expect(cNode.getHeight()).toEqual(2);
       expect(gNode.getHeight()).toEqual(1);
       expect(iNode.getHeight()).toEqual(0);
 
       aNode.addChild(bNode);
-      
+
+      // Trees should look like this:
+      //            A         C
+      //          /           |
+      //         /            |
+      //        /             |
+      //       B              G
+      //    /  |  \           |
+      //   /   |   \          |
+      //  D    E    F         I
+      //       |
+      //       |
+      //       H
+
       expect(aNode.getHeight()).toEqual(3);
 
       aNode.addChild(cNode);
+      
+      // Tree should look like this:
+      //            A
+      //          /   \
+      //         /     \
+      //        /       \
+      //       B         C
+      //    /  |  \      |
+      //   /   |   \     |
+      //  D    E    F    G
+      //       |         |
+      //       |         |
+      //       H         I
 
       expect(aNode.getHeight()).toEqual(3);
       expect(bNode.getHeight()).toEqual(2);
@@ -200,6 +280,21 @@ describe('TreeNode', () => {
 
       jNode.addChild(kNode);
       aNode.addChild(jNode);
+
+      // Tree should look like this:
+      //                 A
+      //            /    |    \
+      //           /     |     \
+      //          /      |      \
+      //         /       |       \
+      //        /        |        \
+      //       B         C         J
+      //    /  |  \      |         |
+      //   /   |   \     |         |
+      //  D    E    F    G         K
+      //                 |
+      //                 |
+      //                 I
 
       expect(aNode.getHeight()).toEqual(3);
       expect(bNode.getHeight()).toEqual(2);

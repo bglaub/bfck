@@ -1,13 +1,29 @@
-import { Token } from "../../lexical/tokenizer/Token";
-import { TokenType } from "../../lexical/tokenizer/TokenType";
-import { ParsedInstructionType } from "./ParsedInstructionType";
-import { ParseTreeNode } from "./ParseTreeNode";
+import { Token } from "../../lexical/tokenizer/token/Token";
+import { TokenType } from "../../lexical/tokenizer/token/TokenType";
+import { Position } from "../../utilities/input/Position";
+import { Instruction } from "./Instruction/Instruction";
+import { InstructionOperation } from "./Instruction/InstructionOperation";
+import { InstructionTreeNode } from "./Instruction/InstructionTreeNode";
+import { ParseTreeNode } from "./ParsedInstruction/ParseTreeNode";
+import { ParsedInstructionOperation } from "./ParsedInstruction/ParsedInstructionOperation";
+import { SyntacticalError } from "./SyntacticalError";
 
 /**
  * Parser is responsible for taking tokens and turning them into a parse tree.
  */
 export class Parser {
   
+  private static readonly TOKEN_TO_PARSE_INSTRUCTION: Map<TokenType, ParsedInstructionOperation> = new Map([
+    [ TokenType.INCREMENT_DATA_POINTER, ParsedInstructionOperation.INCREMENT_DATA_POINTER ],
+    [ TokenType.DECREMENT_DATA_POINTER, ParsedInstructionOperation.DECREMENT_DATA_POINTER ],
+    [ TokenType.INCREMENT_BYTE, ParsedInstructionOperation.INCREMENT_BYTE ],
+    [ TokenType.DECREMENT_BYTE, ParsedInstructionOperation.DECREMENT_BYTE ],
+    [ TokenType.OUTPUT_BYTE, ParsedInstructionOperation.OUTPUT_BYTE ],
+    [ TokenType.INPUT_BYTE, ParsedInstructionOperation.INPUT_BYTE ],
+    [ TokenType.MOVE_FORWARD_INSTRUCTION_POINTER, ParsedInstructionOperation.MOVE_FORWARD_INSTRUCTION_POINTER ],
+    [ TokenType.MOVE_BACKWARD_INSTRUCTION_POINTER, ParsedInstructionOperation.MOVE_BACKWARD_INSTRUCTION_POINTER ]
+  ]);
+
   public parse(tokens: Token[]): ParseTreeNode {
     const root: ParseTreeNode = this.getStartNode();
     this.buildParseTree(root, tokens.toReversed());
@@ -23,33 +39,70 @@ export class Parser {
     const currentToken: Token = remainingTokens.pop() as Token;
 
     if(currentToken.type === TokenType.MOVE_FORWARD_INSTRUCTION_POINTER) {
-      let operation: ParseTreeNode = this.getOperationNode();
-      operation.addChild(this.getOperatorNode(currentToken));
+      const operation: ParseTreeNode = this.getLoopNode();
+      operation.addChild(this.getTokenNode(currentToken));
       currentNode.addChild(operation);
       nextNode = operation;
     } else if(currentToken.type === TokenType.MOVE_BACKWARD_INSTRUCTION_POINTER) {
-      let operator: ParseTreeNode = this.getOperatorNode(currentToken);
+      const operator: ParseTreeNode = this.getTokenNode(currentToken);
       currentNode.addChild(operator);
-      if (!operator?.getParent()?.getParent()) {
-        throw new Error('There is a ] without a starting [');
+      if (operator?.getParent()?.data.operation !== ParsedInstructionOperation.LOOP) {
+        throw new SyntacticalError('A "]" was found without a starting "[".', currentToken.symbol, currentToken.position);
       }
       nextNode = operator?.getParent()?.getParent() as ParseTreeNode;
     } else {
-      currentNode.addChild(this.getOperatorNode(currentToken));
+      currentNode.addChild(this.getTokenNode(currentToken));
     }
 
     this.buildParseTree(nextNode, remainingTokens);
   }
 
-  private getStartNode(): ParseTreeNode {
-    return new ParseTreeNode(ParsedInstructionType.START);
-  }
-  
-  private getOperationNode(): ParseTreeNode {
-    return new ParseTreeNode(ParsedInstructionType.OPERATION);
+  private buildInstructionTree(root: ParseTreeNode) {
+    let ast: InstructionTreeNode;
+
+    root.traverse((currentNode: ParseTreeNode) => {
+      if(currentNode.data.operation === ParsedInstructionOperation.START) {
+        ast = new InstructionTreeNode(new Instruction(InstructionOperation.START, {symbol: '', position: {line: 0, column: 0}}));
+      } else if(currentNode.data.operation === ParsedInstructionOperation.LOOP) {
+        const firstChild: ParseTreeNode | undefined = currentNode.getLastChild();
+        const lastChild: ParseTreeNode | undefined = currentNode.getFirstChild();
+        if(lastChild?.data.operation !== ParsedInstructionOperation.MOVE_BACKWARD_INSTRUCTION_POINTER) {
+          throw new SyntacticalError('A "[" was found without an ending "]".', lastChild?.data?.token?.symbol as string, lastChild?.data?.token?.position as Position)
+        }
+        const loopNode = new InstructionTreeNode(new Instruction(InstructionOperation.LOOP, [
+          {
+            symbol: firstChild?.data?.token?.symbol as string,
+            position: firstChild?.data?.token?.position as Position
+          },
+          {
+            symbol: lastChild?.data?.token?.symbol as string,
+            position: lastChild?.data?.token?.position as Position
+          },
+        ]));
+        ast.addChild(loopNode);
+        ast = loopNode;
+      } else if(currentNode.data.operation === ParsedInstructionOperation.MOVE_FORWARD_INSTRUCTION_POINTER) {
+        currentNode.detach();
+      } else if(currentNode.data.operation === ParsedInstructionOperation.MOVE_BACKWARD_INSTRUCTION_POINTER) {
+        currentNode.detach();
+        ast = ast.getParent()?.getParent() as InstructionTreeNode;
+      }
+    });
+
   }
 
-  private getOperatorNode(token: Token): ParseTreeNode {
-    return new ParseTreeNode(ParsedInstructionType.OPERATOR, token);
+  private getStartNode(): ParseTreeNode {
+    return new ParseTreeNode(ParsedInstructionOperation.START);
+  }
+  
+  private getLoopNode(): ParseTreeNode {
+    return new ParseTreeNode(ParsedInstructionOperation.LOOP);
+  }
+
+  private getTokenNode(token: Token): ParseTreeNode {
+    return new ParseTreeNode(
+      Parser.TOKEN_TO_PARSE_INSTRUCTION.get(token.type) as ParsedInstructionOperation,
+      token
+    );
   }
 }

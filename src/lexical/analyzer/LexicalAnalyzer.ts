@@ -1,5 +1,5 @@
 import { Scanner } from "../scanner/Scanner";
-import { Token } from "../tokenizer/Token";
+import { Token } from "../tokenizer/token/Token";
 import { Tokenizer } from "../tokenizer/Tokenizer";
 
 /**
