@@ -43,32 +43,34 @@ export class Parser {
     if(!remainingTokens.length) {
       return;
     }
-
+    
     let nextNode: ParseTreeNode = currentNode;
     const currentToken: Token = remainingTokens.pop() as Token;
 
     if(currentToken.type === TokenType.MOVE_FORWARD_INSTRUCTION_POINTER) {
       const operation: ParseTreeNode = this.getLoopNode();
-      operation.addChild(this.getTokenNode(currentToken));
       currentNode.addChild(operation);
+      currentNode = operation;
       nextNode = operation;
     } else if(currentToken.type === TokenType.MOVE_BACKWARD_INSTRUCTION_POINTER) {
-      const operator: ParseTreeNode = this.getTokenNode(currentToken);
-      currentNode.addChild(operator);
-      if (operator?.getParent()?.data.operation !== ParsedInstructionOperation.LOOP) {
+      if (currentNode.data.operation !== ParsedInstructionOperation.LOOP) {
         throw new SyntacticalError('A "]" was found without a starting "[".', currentToken.symbol, currentToken.position);
       }
-      nextNode = operator?.getParent()?.getParent() as ParseTreeNode;
-    } else {
-      currentNode.addChild(this.getTokenNode(currentToken));
+      nextNode = currentNode.getParent() as ParseTreeNode;
     }
 
+    currentNode.addChild(this.getTokenNode(currentToken));
+    
     this.buildParseTree(nextNode, remainingTokens);
   }
 
   private buildInstructionTree(root: ParseTreeNode): InstructionTreeNode {
     
-    let ast: InstructionTreeNode = new InstructionTreeNode(new Instruction(InstructionOperation.START, {symbol: '', position: {line: 0, column: 0}}));
+    let ast: InstructionTreeNode = new InstructionTreeNode(
+      new Instruction(
+        InstructionOperation.START, {symbol: '', position: {line: 0, column: 0}}
+      )
+    );
 
     root.traverse((currentNode: ParseTreeNode) => {
       if(currentNode.data.operation === ParsedInstructionOperation.START) {

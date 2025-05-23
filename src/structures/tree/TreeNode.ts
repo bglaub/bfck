@@ -119,7 +119,7 @@ export class TreeNode<T> {
    * @returns first child, undefined otherwise
    */
   public getFirstChild(): TreeNode<T> | undefined {
-    return Array.from(this.childrenMap.values()).pop();
+    return Array.from(this.childrenMap.values()).reverse().pop();
   }
 
   /**
@@ -128,7 +128,7 @@ export class TreeNode<T> {
    * @returns last child, undefined otherwise
    */
   public getLastChild(): TreeNode<T> | undefined {
-    return Array.from(this.childrenMap.values()).reverse().pop();
+    return Array.from(this.childrenMap.values()).pop();
   }
 
   /**
