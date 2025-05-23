@@ -1,6 +1,7 @@
 import { FileReader } from "./input/FileReader";
 import { LexicalAnalyzer } from "./lexical/analyzer/LexicalAnalyzer";
 import { Token } from "./lexical/tokenizer/token/Token";
+import { InstructionTreeNode } from "./syntax/parser/Instruction/InstructionTreeNode";
 import { ParseTreeNode } from "./syntax/parser/ParsedInstruction/ParseTreeNode";
 import { Parser } from "./syntax/parser/Parser";
 
@@ -13,16 +14,11 @@ import { Parser } from "./syntax/parser/Parser";
 
   const tokens: Token[] = analyzer.analyze(input);
 
-  const cst: ParseTreeNode = (new Parser()).parse(tokens);
+  const ast: InstructionTreeNode = (new Parser()).parse(tokens);
 
-  cst.traverse((node: ParseTreeNode) => {
+  ast.traverse((node: InstructionTreeNode) => {
     console.log('---------------------------------------------');
-    if(node.data.token) {
-      console.log(`${node.data.token?.toString()}`);
-    }
-    console.log(`DEPTH: ${node.getDepth()}`);
-    console.log(`LEFT SIBLING: ${node.getLeftSibling()?.data?.token?.symbol}`);
-    console.log(`RIGHT SIBLING: ${node.getRightSibling()?.data?.token?.symbol}`);
+    console.log(`METADATA: ${node.data.metadata}`);
     console.log('---------------------------------------------');
   });
 })();
