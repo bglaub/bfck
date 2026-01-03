@@ -12,7 +12,8 @@ export class Instruction {
   public readonly operation: InstructionOperation;
 
   /**
-   * The underlying metadata that represents the operation from the actual input.
+   * The underlying metadata that represents the operation from the actual
+   * input.
    */
   public readonly metadata: InstructionMetadata | [InstructionMetadata, InstructionMetadata];
 

@@ -1,3 +1,4 @@
+import { Executor } from "./executor/executor";
 import { FileReader } from "./input/FileReader";
 import { LexicalAnalyzer } from "./lexical/analyzer/LexicalAnalyzer";
 import { Token } from "./lexical/tokenizer/token/Token";
@@ -15,11 +16,5 @@ import { Parser } from "./syntax/parser/Parser";
 
   const ast: InstructionTreeNode = (new Parser()).parse(tokens);
 
-  ast.traverse((node: InstructionTreeNode) => {
-    console.log('---------------------------------------------');
-    console.log(`DEPTH: ${node.getDepth()}`);
-    console.log(`OPERATION: ${node.data.operation}`);
-    console.log(`METADATA: ${JSON.stringify(node.data.metadata, null, 2)}`);
-    console.log('---------------------------------------------');
-  });
+  (new Executor()).execute(ast);
 })();
