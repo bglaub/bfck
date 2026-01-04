@@ -43,5 +43,5 @@ describe('Parser', () => {
       expect(outputNode).toBeDefined();
       expect(outputNode?.data.operation).toBe(InstructionOperation.OUTPUT_BYTE);
     });
-  })
+  });
 });

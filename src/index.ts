@@ -14,10 +14,7 @@ import { Parser } from "./syntax/parser/Parser";
 
   const tokens: Token[] = analyzer.analyze(input);
 
-  for(const token of tokens) {
-    console.log(token.toString());
-  }
-  //const ast: InstructionTreeNode = (new Parser()).parse(tokens);
+  const ast: InstructionTreeNode = (new Parser()).parse(tokens);
 
-  //(new Executor()).execute(ast);
+  (new Executor()).execute(ast);
 })();

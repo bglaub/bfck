@@ -1,26 +1,31 @@
-import { resolveObjectURL } from "buffer";
 import { InstructionOperation } from "../syntax/parser/Instruction/InstructionOperation";
 import { InstructionTreeNode } from "../syntax/parser/Instruction/InstructionTreeNode";
 
 export class Executor {
 
+  private printBuffer: string = '';
   private memory: number[] = [0];
   private pointer: number = 0;
 
   execute(instructionTree: InstructionTreeNode): void {
+
+    this.printBuffer = '';
     this.memory = [0];
     this.pointer = 0;
+
     let node = instructionTree.getFirstChild();
 
     while(node) {
       this.executeNode(node);
       node = node.getRightSibling();
     }
+    
+    if (this.printBuffer.length > 0) {
+      console.log(this.printBuffer);
+    }
   }
 
   executeNode(node: InstructionTreeNode): void {
-    console.log('---------------------------------------------------------------------')
-    console.log('Executing operation:', InstructionOperation[node.data.operation]);
     switch(node.data.operation) {
       case InstructionOperation.INCREMENT_DATA_POINTER:
         this.incrementDataPointer();
@@ -43,7 +48,6 @@ export class Executor {
       default:
         throw new Error(`Unknown operation: ${node.data.operation}`);
     }
-    console.log('---------------------------------------------------------------------')
   }
 
   private executeLoop(loopNode: InstructionTreeNode): void {
@@ -57,24 +61,21 @@ export class Executor {
         this.executeNode(node);
         node = node.getRightSibling();
       }
-      if(this.memory[this.pointer] !== 0) {
+      if(this.memory[this.pointer] === 0) {
         return;
       }
     }
   }
 
   private incrementDataPointer() {
-    console.log('Incrementing data pointer from', this.pointer, 'to', this.pointer + 1);
     this.pointer++;
 
     if(this.pointer >= this.memory.length) {
       this.memory.push(0);
     }
-    console.log('Memory size is now', this.memory.length);
   }
 
   private decrementDataPointer() {
-    console.log('Decrementing data pointer from', this.pointer, 'to', this.pointer - 1);
     this.pointer--;
 
     if(this.pointer < 0) {
@@ -84,17 +85,13 @@ export class Executor {
 
   private incrementDataByte() {
     this.memory[this.pointer] = (this.memory[this.pointer] + 1) % 256;
-    console.log('Incrementing data byte at pointer', this.pointer, 'to', this.memory[this.pointer]);
   }
 
   private decrementDataByte() {
     this.memory[this.pointer] = (this.memory[this.pointer] - 1) % 256;
-    console.log('Decrementing data byte at pointer', this.pointer, 'to', this.memory[this.pointer]);
   }
 
   private outputDataByte() {
-    console.log(String.fromCharCode(this.memory[this.pointer]));
+    this.printBuffer += String.fromCharCode(this.memory[this.pointer]);
   }
-
-
 }

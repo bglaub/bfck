@@ -72,50 +72,58 @@ export class Parser {
       )
     );
 
-    root.traverse((currentNode: ParseTreeNode) => {
-      if(currentNode.data.operation === ParsedInstructionOperation.START) {
-        // do nothing
-      } else if(currentNode.data.operation === ParsedInstructionOperation.LOOP) {
-        const firstChild: ParseTreeNode | undefined = currentNode.getFirstChild();
-        const lastChild: ParseTreeNode | undefined = currentNode.getLastChild();
-        if(lastChild?.data.operation !== ParsedInstructionOperation.MOVE_BACKWARD_INSTRUCTION_POINTER) {
-          throw new SyntacticalError('A "[" was found without an ending "]".', lastChild?.data?.token?.symbol as string, lastChild?.data?.token?.position as Position)
-        }
-        const loopNode = new InstructionTreeNode(new Instruction(InstructionOperation.LOOP, [
-          {
-            symbol: firstChild?.data?.token?.symbol as string,
-            position: firstChild?.data?.token?.position as Position
-          },
-          {
-            symbol: lastChild?.data?.token?.symbol as string,
-            position: lastChild?.data?.token?.position as Position
-          },
-        ]));
-        ast.addChild(loopNode);
-        ast = loopNode;
-      } else if(currentNode.data.operation === ParsedInstructionOperation.MOVE_FORWARD_INSTRUCTION_POINTER) {
-        currentNode.detach();
-      } else if(currentNode.data.operation === ParsedInstructionOperation.MOVE_BACKWARD_INSTRUCTION_POINTER) {
-        currentNode.detach();
-        ast = ast.getParent() as InstructionTreeNode;
-      } else {
-        ast.addChild(
-          new InstructionTreeNode(
-            new Instruction(
-              Parser.PARSE_TO_PROGRAM_INSTRUCTION.get(
-                currentNode.data.operation
-              ) as InstructionOperation, 
-              {
-                symbol: currentNode.data.token?.symbol as string,
-                position: currentNode.data.token?.position as Position
-              }
-            )
-          )
-        );
-      }
-    });
+    this.buildInstructionTreeRecursive(ast, root.getFirstChild() as ParseTreeNode);
 
     return ast;
+  }
+
+  private buildInstructionTreeRecursive(parent: InstructionTreeNode, parseNode: ParseTreeNode | null | undefined): void {
+    let node: ParseTreeNode | null | undefined = parseNode;
+    while(node) {
+      if(node.data.operation === ParsedInstructionOperation.LOOP) {
+        const loopNode = this.getInstructionLoopNode(node);
+        parent.addChild(loopNode);
+        this.buildInstructionTreeRecursive(loopNode, node.getFirstChild() as ParseTreeNode);
+      } else {
+        parent.addChild(
+          this.getInstructionNode(node)
+        );
+      }
+      node = node.getRightSibling();
+    }
+  }
+
+  private getInstructionNode(node: ParseTreeNode): InstructionTreeNode {
+    return new InstructionTreeNode(
+      new Instruction(
+        Parser.PARSE_TO_PROGRAM_INSTRUCTION.get(
+          node.data.operation
+        ) as InstructionOperation,
+        {
+          symbol: node.data.token?.symbol as string,
+          position: node.data.token?.position as Position
+        }
+      )
+    );
+  }
+
+  private getInstructionLoopNode(node: ParseTreeNode): InstructionTreeNode {
+    const firstChild: ParseTreeNode | undefined = node.getFirstChild();
+    const lastChild: ParseTreeNode | undefined = node.getLastChild();
+    
+    firstChild?.detach();
+    lastChild?.detach();
+    
+    return new InstructionTreeNode(new Instruction(InstructionOperation.LOOP, [
+      {
+        symbol: firstChild?.data?.token?.symbol as string,
+        position: firstChild?.data?.token?.position as Position
+      },
+      {
+        symbol: lastChild?.data?.token?.symbol as string,
+        position: lastChild?.data?.token?.position as Position
+      },
+    ]));
   }
 
   private getStartNode(): ParseTreeNode {
